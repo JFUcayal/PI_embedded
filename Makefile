@@ -1,5 +1,5 @@
 src:
-	g++ -o opencv main.cpp system.cpp
+	g++ -o opencv main.cpp system.cpp logger.cpp
 
 clean:
 	rm opencv
