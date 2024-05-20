@@ -1,11 +1,12 @@
 #include <iostream>
 #include "system.h"
+#include "logger.h"
 
 using namespace std;
 
 int main(){
 
-    cout << "hello" << endl;
+    System main_system;
 
     return 0;
 }

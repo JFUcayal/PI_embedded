@@ -1,0 +1,3 @@
+*** 	 LOGGER INFO 	 ***
+*** 	 LOGGER ERROR 	 ***
+*** 	 LOGGER WARNING 	 ***

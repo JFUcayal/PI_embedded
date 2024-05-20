@@ -1,5 +1,8 @@
 src:
-	g++ -o opencv main.cpp system.cpp logger.cpp
+	g++ -o opencv main.cpp system.cpp logger.cpp camera.cpp
+
+log:
+	rm Log.txt
 
 clean:
 	rm opencv
@@ -9,4 +12,4 @@ prog:
 
 run: clean all prog
 
-all: src
+all: src 
