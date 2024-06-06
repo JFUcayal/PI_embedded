@@ -1,5 +1,5 @@
 src:
-	g++ -o opencv main.cpp system.cpp logger.cpp camera.cpp
+	g++ -g -o opencv main.cpp system.cpp logger.cpp camera.cpp `pkg-config --cflags --libs opencv4`
 
 log:
 	rm Log.txt

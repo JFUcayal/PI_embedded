@@ -11,14 +11,17 @@ class Logger {
 
     private:
         FILE *file_ptr;
-        const char* file_name = "Log.txt";
+        //const char* file_name = "Log.txt";
+        const char* log_msg;
 
     public:
         Logger();
         ~Logger();
-        void log_write_info();
-        void log_write_error();
-        void log_write_warning();
+        void open_logger(const char*);
+        void close_logger(const char*);
+        void log_write_info(const char*);
+        void log_write_error(const char*);
+        void log_write_warning(const char*);
         
 };
 

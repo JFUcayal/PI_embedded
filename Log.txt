@@ -1,3 +1,2 @@
-*** 	 LOGGER INFO 	 ***
-*** 	 LOGGER ERROR 	 ***
-*** 	 LOGGER WARNING 	 ***
+[INFO]	  -> System Startup @ 06-06-2024 18:05:46
+[INFO]	  -> Image Captured & Saved!

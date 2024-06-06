@@ -8,5 +8,7 @@ int main(){
 
     System main_system;
 
+    main_system.capture_image();
+
     return 0;
 }
