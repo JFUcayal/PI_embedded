@@ -1,27 +1,26 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <string>
-#include <cstring>
+#include <iostream>
+#include <fstream>
 
+using namespace std;
 
 class Logger {
 
     private:
-        FILE *file_ptr;
-        //const char* file_name = "Log.txt";
-        const char* log_msg;
+        ofstream log_file;
+        string log_msg;
 
     public:
         Logger();
         ~Logger();
-        void open_logger(const char*);
-        void close_logger(const char*);
-        void log_write_info(const char*);
-        void log_write_error(const char*);
-        void log_write_warning(const char*);
+        void open_logger();
+        void close_logger();
+        void log_write_info(string);
+        void log_write_error(string);
+        void log_write_warning(string);
         
 };
 

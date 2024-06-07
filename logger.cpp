@@ -10,55 +10,36 @@ Logger::~Logger(){
 
 }
 
-void Logger::open_logger(const char* file_name){
+void Logger::open_logger(){
 
-    file_ptr = fopen(file_name, "w");
+    log_file.open("Log.txt");
 
-    if(file_ptr == NULL)
-    {
-        printf("Error opening logger file!\n");
-    }
 }
 
-void Logger::close_logger(const char* file_name){
+void Logger::close_logger(){
     
-    fclose(file_ptr);
+    log_file.close();
 }
 
-void Logger::log_write_info(const char* info_msg){
+void Logger::log_write_info(string info_msg){
 
-    if(file_ptr == NULL)
-    {
-        printf("Error in logger file!\n");
-    }
-
-    fprintf(file_ptr, "[INFO]\t  -> ");
-    fprintf(file_ptr, "%s",info_msg);
-    fprintf(file_ptr, "\n");
-
+    log_file << "[INFO]\t  -> ";
+    log_file << info_msg << "\n";
+    log_file.flush();
 }
 
-void Logger::log_write_error(const char* error_msg){
+void Logger::log_write_error(string error_msg){
 
-    if(file_ptr == NULL)
-    {
-        printf("Error in logger file!\n");
-    }
 
-    fprintf(file_ptr, "[ERROR]   -> ");
-    fprintf(file_ptr, "%s",error_msg);
-    fprintf(file_ptr, "\n");
+    log_file << "[ERROR]\t  -> ";
+    log_file << error_msg << "\n";
+    log_file.flush();
 }
 
-void Logger::log_write_warning(const char* warning_msg){
+void Logger::log_write_warning(string warning_msg){
 
-    if(file_ptr == NULL)
-    {
-        printf("Error in logger file!\n");
-    }
-
-    fprintf(file_ptr, "[WARNING] -> ");
-    fprintf(file_ptr, "\t%s",warning_msg);
-    fprintf(file_ptr, "\n");
+    log_file << "[WARNING]\t  -> ";
+    log_file << warning_msg << "\n";
+    log_file.flush();
 
 }

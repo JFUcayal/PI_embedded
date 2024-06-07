@@ -4,6 +4,13 @@
 #include "camera.h"
 #include "logger.h"
 #include "string.h"
+#include <string>
+#include <ctime>
+//#include <filesystem>
+//#include <sys/types.h>
+//#include <dirent.h>
+#include "iostream"
+#include <fstream>
 
 class System{
 
@@ -12,6 +19,8 @@ class System{
         Camera camera1;
         cv::Mat photo_frame;
         time_t current_time;
+        uint32_t photo_index;
+        ofstream dmg_arquive;
 
     public:
         System();
@@ -19,10 +28,13 @@ class System{
         void startup();
         void shutdown();
         time_t get_time(); 
-        char* get_time_format(tm*);
-        char* append_timestamp(const char*);
-
+        string get_time_format(tm*);
+        string append_timestamp(string);
+        //uint32_t get_photo_index();
         bool capture_image();
+        bool damage_detected();
+        void add_damage_list();
+
 
         //Threads
         //static void* t_CameraBoot();

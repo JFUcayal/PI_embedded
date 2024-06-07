@@ -17,6 +17,15 @@ bool Camera::open_camera(){
     if (!cap.isOpened()) {
         cerr << "Error opening Camera!" << endl;
         return false;
+    } 
+    else 
+    {
+        //cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+        //cap.set(cv::CAP_PROP_FRAME_HEIGHT,480);
+        //cap.set(cv::CAP_PROP_FPS, 30);
+        //cap.set(cv::CAP_PROP_BRIGHTNESS, 100); 
+        //cap.set(cv::CAP_PROP_CONTRAST, 0);   
+        //cap.set(cv::CAP_PROP_SATURATION, 70);
     }
     return true;
 }
@@ -54,11 +63,14 @@ bool Camera::capture_image(cv::Mat& frame){
 
 bool Camera::save_image(const string& image_path, const cv::Mat& frame){
 
-    if (frame.empty()) {
+    if (frame.empty()) 
+    {
         cerr << "No Image!" << endl;
         return false;
     }
-    if (!cv::imwrite(image_path, frame)) {
+
+    if (!cv::imwrite(image_path, frame)) 
+    {
         cerr << "Error Saving Image!" << endl;
         return false;
     }
