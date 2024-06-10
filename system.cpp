@@ -1,43 +1,58 @@
 #include "system.h"
 
-
 using namespace std;
+
+
 
 static void damage_list();
 
+/// @brief System Constructor
 System::System(){
     startup();
 }
 
+/// @brief System Destructor
 System::~System(){
     
 }
 
+/// @brief System shutdown
 void System::shutdown(){
 
     main_logger.close_logger();
     dmg_arquive.close();
 }
 
+/// @brief System Init
 void System::startup(){
 
+    //Load i2c modules
+    system("modprobe i2c-dev");
+    system("modprobe i2c-bcm2835");
+
+    //Get photo_index for image ID registration
     photo_index = 1;
+    //photo_index = get_photo_index();
 
     cout << "Hello system!" << endl;
 
+    //Main & damage_list log opening
     main_logger.open_logger();   
-
     dmg_arquive.open("dmg_list.txt", ios::out | ios::app | ios::ate);
 
+    //Startup message sent to main logger
     string startup_msg = ("System Startup @");
     startup_msg = append_timestamp(startup_msg);
-
     main_logger.log_write_info(startup_msg);
 
-    //photo_index = get_photo_index();
 } 
 
+/// @brief Append timestamp to a message string
+/// @param msg string with the original message
+/// @return Concatenated message -> Original message + Timestamp
 string System::append_timestamp(string msg){
+
+    string concatenated_msg = msg;
 
     //get time
     current_time = get_time();
@@ -47,13 +62,15 @@ string System::append_timestamp(string msg){
     string time_msg;
     time_msg = get_time_format(tm_info);
 
-    string concatenated_msg = msg;
-
+    //Append message info with timestamp
     concatenated_msg += " " + time_msg;
     
     return concatenated_msg;
 }
 
+/// @brief Formats the current time to "Day-Month-Year Hour-Minute-Second" 
+/// @param time_info -> Current time fetched in get_time() function
+/// @return Time formated string
 string System::get_time_format(tm *time_info){
 
     char sampleTimeStr[20]; 
@@ -64,6 +81,8 @@ string System::get_time_format(tm *time_info){
     return time_string;
 }
 
+/// @brief Retrieves current time
+/// @return Current time in time_t type
 time_t System::get_time(){
 
     time_t curr_time;
@@ -83,6 +102,8 @@ uint32_t System::get_photo_index(){
 }
 */
 
+/// @brief Capture image using opencv functions
+/// @return True -> Captured Image | False -> Camera didn't open
 bool System::capture_image(){
 
     string index_char;
@@ -137,7 +158,8 @@ bool System::capture_image(){
     return true;
 }
 
-
+/// @brief Detect Damage in a image -> AI model output
+/// @return True -> Damage detected | False -> Damage not detected
 bool System::damage_detected(){
 
     bool dmg_detected = true;
@@ -152,6 +174,7 @@ bool System::damage_detected(){
     return false;
 }
 
+/// @brief Add timestamp of damage occured to dmg_list.txt
 void System::add_damage_list(){
 
     string log_dmg_msg;
@@ -160,4 +183,19 @@ void System::add_damage_list(){
 
     dmg_arquive << log_dmg_msg << endl;
     dmg_arquive.flush();
+
+    log_dmg_msg = "Damage Detected @";
+    log_dmg_msg = append_timestamp(log_dmg_msg);
+    main_logger.log_write_warning(log_dmg_msg);
+}
+
+/// @brief Get LDR value from ADC
+/// @return ADC value read 
+uint16_t System::get_light_value(){
+
+    uint16_t light_val;
+
+    light_val = get_adc_value(0);
+
+    return light_val;
 }

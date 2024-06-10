@@ -11,6 +11,7 @@
 //#include <dirent.h>
 #include "iostream"
 #include <fstream>
+#include "adc.h"
 
 class System{
 
@@ -21,6 +22,7 @@ class System{
         time_t current_time;
         uint32_t photo_index;
         ofstream dmg_arquive;
+        uint16_t light_value;
 
     public:
         System();
@@ -34,15 +36,15 @@ class System{
         bool capture_image();
         bool damage_detected();
         void add_damage_list();
+        uint16_t get_light_value();
 
 
         //Threads
-        //static void* t_CameraBoot();
         //static void* t_DetectDmg();
         //static void* t_CapturePhoto();
-        //static void* t_Warning();
-        //static void* tDatabase(); -> comm w/ database or send info to company
+        //static void* t_SendToServer();
         
+
         //bool init_threads();
         //void join_threads();
 };

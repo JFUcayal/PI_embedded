@@ -38,7 +38,7 @@ void Logger::log_write_error(string error_msg){
 
 void Logger::log_write_warning(string warning_msg){
 
-    log_file << "[WARNING]\t  -> ";
+    log_file << "[WARNING] -> ";
     log_file << warning_msg << "\n";
     log_file.flush();
 
