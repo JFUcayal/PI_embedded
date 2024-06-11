@@ -1,0 +1,3 @@
+[INFO]	  -> System Startup @ 11-06-2024 03:29:25
+[ERROR]	  -> Camera Didn't Opened @ 11-06-2024 03:29:25
+[WARNING] -> Damage Detected @ 11-06-2024 03:29:27

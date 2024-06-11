@@ -1,6 +1,13 @@
 #include "camera.h"
 
+#define CAMERA_DIR "/dev/video2"
+#define IMAGE_HEIGHT 640
+#define IMAGE_WIDTH 640
+
 using namespace std;
+
+static cv::VideoCapture cap(CAMERA_DIR);
+
 
 Camera::Camera(int camera_index):camera_index(camera_index){
  
@@ -19,9 +26,9 @@ bool Camera::open_camera(){
         return false;
     } 
     else 
-    {
+    {      
         //cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-        //cap.set(cv::CAP_PROP_FRAME_HEIGHT,480);
+        //cap.set(cv::CAP_PROP_FRAME_HEIGHT,640);
         //cap.set(cv::CAP_PROP_FPS, 30);
         //cap.set(cv::CAP_PROP_BRIGHTNESS, 100); 
         //cap.set(cv::CAP_PROP_CONTRAST, 0);   
@@ -69,7 +76,13 @@ bool Camera::save_image(const string& image_path, const cv::Mat& frame){
         return false;
     }
 
-    if (!cv::imwrite(image_path, frame)) 
+    //Resizing image to the desired format
+    cv::Mat resized_img;
+    cv::Size new_size(IMAGE_WIDTH, IMAGE_HEIGHT);
+
+    cv::resize(frame, resized_img, new_size);
+
+    if (!cv::imwrite(image_path, resized_img)) 
     {
         cerr << "Error Saving Image!" << endl;
         return false;

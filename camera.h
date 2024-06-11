@@ -10,7 +10,6 @@ class Camera{
 
     private:
         int camera_index;
-        cv::VideoCapture cap;
         Logger camera_logger;
 
     public:
