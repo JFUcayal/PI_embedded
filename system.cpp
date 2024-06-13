@@ -45,6 +45,8 @@ void System::startup(){
     startup_msg = append_timestamp(startup_msg);
     main_logger.log_write_info(startup_msg);
 
+    //Connect to server 
+
 } 
 
 /// @brief Append timestamp to a message string
@@ -198,4 +200,28 @@ uint16_t System::get_light_value(){
     light_val = get_adc_value(0);
 
     return light_val;
+}
+
+/// @brief Establishes a connection with the node.js server via WebSockets
+void System::connect_server(){
+
+    client.connect(WEB_SOCKET_IP_ADDR).wait();
+
+    web::json::value json_msg;
+
+    json_msg[U("action")] = web::json::value::string(U("connection"));
+    json_msg[U("type")]   = web::json::value::string(U("rasp"));
+
+    utility::string_t dataJSON = json_msg.serialize();
+
+    //Message to server
+    websocket_outgoing_message out_msg;
+
+    //Add the json content to the message
+    out_msg.set_utf8_message(dataJSON);
+    
+    //Send to server
+    client.send(out_msg).wait();
+
+    sleep(3);
 }
