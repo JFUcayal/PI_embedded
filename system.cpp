@@ -46,7 +46,7 @@ void System::startup(){
     main_logger.log_write_info(startup_msg);
 
     //Connect to server 
-
+    connect_server();
 } 
 
 /// @brief Append timestamp to a message string

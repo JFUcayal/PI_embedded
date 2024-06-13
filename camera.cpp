@@ -1,6 +1,6 @@
 #include "camera.h"
 
-#define CAMERA_DIR "/dev/video2"
+#define CAMERA_DIR "/dev/video0"
 #define IMAGE_HEIGHT 640
 #define IMAGE_WIDTH 640
 
