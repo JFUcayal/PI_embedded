@@ -2,9 +2,9 @@
 
 using namespace std;
 
-
-
 static void damage_list();
+
+System* System::pSys = nullptr;
 
 /// @brief System Constructor
 System::System(){
@@ -44,6 +44,19 @@ void System::startup(){
     string startup_msg = ("System Startup @");
     startup_msg = append_timestamp(startup_msg);
     main_logger.log_write_info(startup_msg);
+
+
+    //Open device driver para GPIOxx com interrupt
+    int fd = open(DEVICE_PATH, O_RDWR);
+
+    if (fd == -1) {
+        string gpio_msg = ("Error opening device @");
+        gpio_msg = append_timestamp(gpio_msg);
+        main_logger.log_write_error(gpio_msg);
+        close(fd);
+    }
+
+    signal(SIGUSR1, System::signal_handler);
 
     //Connect to server 
     connect_server();
@@ -189,6 +202,9 @@ void System::add_damage_list(){
     log_dmg_msg = "Damage Detected @";
     log_dmg_msg = append_timestamp(log_dmg_msg);
     main_logger.log_write_warning(log_dmg_msg);
+
+    //Send to the server
+    send_timestamp(log_dmg_msg);
 }
 
 /// @brief Get LDR value from ADC
@@ -207,6 +223,10 @@ void System::connect_server(){
 
     client.connect(WEB_SOCKET_IP_ADDR).wait();
 
+    string connect_msg = "Connected to the server @";
+    connect_msg = append_timestamp(connect_msg);
+    main_logger.log_write_info(connect_msg);
+
     web::json::value json_msg;
 
     json_msg[U("action")] = web::json::value::string(U("connection"));
@@ -224,4 +244,59 @@ void System::connect_server(){
     client.send(out_msg).wait();
 
     sleep(3);
+}
+
+void System::send_timestamp(string timestamp_msg){
+
+    //Send data to server
+    try {
+        // JSON msg to send
+        web::json::value json_msg;
+
+        json_msg[U("action")] = web::json::value::string(U("update_data"));
+
+        json_msg[U("time")] = web::json::value::string(timestamp_msg);
+
+        utility::string_t dataJSON = json_msg.serialize();
+
+        // Send msg to server
+        websocket_outgoing_message out_msg;
+
+        //Add the json content to the message
+        out_msg.set_utf8_message(dataJSON);
+
+        //Send to server
+        client.send(out_msg).wait();
+
+        string time_msg = "Message sent to server @";
+        time_msg = append_timestamp(time_msg);
+        main_logger.log_write_info(time_msg);
+
+
+        } catch (const web::websockets::client::websocket_exception& e) {
+
+            string error_msg = "Error sending message to server @";
+            error_msg = append_timestamp(error_msg);
+            main_logger.log_write_error(error_msg);
+            
+            cerr << "Error sending message: " << e.what() << endl;
+
+        } catch (const std::exception& e) {
+
+            string error_msg = "Unknown error @";
+            error_msg = append_timestamp(error_msg);
+            main_logger.log_write_error(error_msg);
+
+            cerr << "Erro desconhecido: " << e.what() << endl;
+
+        }   
+}
+
+void System::signal_handler(int signum){
+
+    if(signum == SIGUSR1 && pSys){
+
+        pSys->capture_image();
+
+    }
 }

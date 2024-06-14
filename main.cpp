@@ -20,9 +20,6 @@ int main(){
 
     while(1){
 
-        //system("libcamera-still -o ./images/test0.jpg");
-        //sleep(5);
-
         main_system.capture_image();
         sleep(2);
         main_system.damage_detected();
