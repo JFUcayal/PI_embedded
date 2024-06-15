@@ -24,7 +24,7 @@ int main(){
         sleep(2);
         main_system.damage_detected();
         sleep(2);
-        main_system.get_light_value();
+        //main_system.get_light_value();
     }
 
     return 0;

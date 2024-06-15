@@ -4,6 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include "logger.h"
 
+#define CAMERA_INDEX 2 // /dev/video2
+
 using namespace std;
 
 class Camera{
@@ -13,7 +15,7 @@ class Camera{
         Logger camera_logger;
 
     public:
-        Camera(int camera_index = 0);
+        Camera(int camera_index = CAMERA_INDEX);
         ~Camera();
         bool open_camera();
         void close_camera();

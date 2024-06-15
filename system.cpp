@@ -242,8 +242,6 @@ void System::connect_server(){
     
     //Send to server
     client.send(out_msg).wait();
-
-    sleep(3);
 }
 
 void System::send_timestamp(string timestamp_msg){

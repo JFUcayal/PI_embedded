@@ -1,6 +1,7 @@
 #include "camera.h"
 
-#define CAMERA_DIR "/dev/video0"
+//#define CAMERA_DIR "/dev/video0"
+#define CAMERA_DIR "v4l2src device=/dev/video2 ! video/x-raw ! videoconvert ! appsink"
 #define IMAGE_HEIGHT 640
 #define IMAGE_WIDTH 640
 
@@ -21,19 +22,11 @@ bool Camera::open_camera(){
 
     cap.open(camera_index);
 
-    if (!cap.isOpened()) {
+    if (!cap.isOpened()) {      
         cerr << "Error opening Camera!" << endl;
         return false;
-    } 
-    else 
-    {      
-        //cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-        //cap.set(cv::CAP_PROP_FRAME_HEIGHT,640);
-        //cap.set(cv::CAP_PROP_FPS, 30);
-        //cap.set(cv::CAP_PROP_BRIGHTNESS, 100); 
-        //cap.set(cv::CAP_PROP_CONTRAST, 0);   
-        //cap.set(cv::CAP_PROP_SATURATION, 70);
     }
+    
     return true;
 }
 
