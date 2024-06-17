@@ -27,12 +27,8 @@ void System::shutdown(){
 void System::startup(){
 
     //Load i2c modules
-    system("modprobe i2c-dev");
-    system("modprobe i2c-bcm2835");
-
-    //Get photo_index for image ID registration
-    photo_index = 1;
-    //photo_index = get_photo_index();
+    //system("modprobe i2c-dev");
+    //system("modprobe i2c-bcm2835");
 
     cout << "Hello system!" << endl;
 
@@ -44,19 +40,6 @@ void System::startup(){
     string startup_msg = ("System Startup @");
     startup_msg = append_timestamp(startup_msg);
     main_logger.log_write_info(startup_msg);
-
-
-    //Open device driver para GPIOxx com interrupt
-    int fd = open(DEVICE_PATH, O_RDWR);
-
-    if (fd == -1) {
-        string gpio_msg = ("Error opening device @");
-        gpio_msg = append_timestamp(gpio_msg);
-        main_logger.log_write_error(gpio_msg);
-        close(fd);
-    }
-
-    signal(SIGUSR1, System::signal_handler);
 
     //Connect to server 
     connect_server();
@@ -78,7 +61,7 @@ string System::append_timestamp(string msg){
     time_msg = get_time_format(tm_info);
 
     //Append message info with timestamp
-    concatenated_msg += " " + time_msg;
+    concatenated_msg += "_" + time_msg;
     
     return concatenated_msg;
 }
@@ -89,7 +72,7 @@ string System::append_timestamp(string msg){
 string System::get_time_format(tm *time_info){
 
     char sampleTimeStr[20]; 
-    strftime(sampleTimeStr, sizeof(sampleTimeStr), "%d-%m-%Y %H:%M:%S", time_info); 
+    strftime(sampleTimeStr, sizeof(sampleTimeStr), "%d-%m-%Y_%H:%M:%S", time_info); 
 
    string time_string(sampleTimeStr);
 
@@ -119,11 +102,11 @@ uint32_t System::get_photo_index(){
 
 /// @brief Capture image using opencv functions
 /// @return True -> Captured Image | False -> Camera didn't open
-bool System::capture_image(){
+string System::capture_image(){
 
     string index_char;
-    string folder_path = "./images/";
     string log_msg;
+    string return_name;
 
     if(!camera1.open_camera())
     {
@@ -131,21 +114,21 @@ bool System::capture_image(){
         log_msg = append_timestamp(log_msg);
 
         main_logger.log_write_error(log_msg);
-        return false;
+        return "ERROR";
     }
 
     if(camera1.capture_image(photo_frame))
     {
-        index_char = to_string(photo_index);
+        //index_char = to_string(photo_index);
 
-        folder_path += index_char;
+        //return_name += index_char;
+        return_name = append_timestamp(return_name);
+        
+        // ./images/x xx-xx-xxxx xx:xx:xx.jpg
+        string image_path = "./images/" + return_name + ".jpg";
 
-        folder_path = append_timestamp(folder_path); 
-
-        //append .jpg
-        string image_path = folder_path + ".jpg";
-
-        photo_index++;
+        //Increment overall photo index
+        //photo_index++;
 
         if(camera1.save_image(image_path, photo_frame))
         {
@@ -169,15 +152,14 @@ bool System::capture_image(){
         main_logger.log_write_error(log_msg);
     }
 
+
     camera1.close_camera();
-    return true;
+    return return_name;
 }
 
 /// @brief Detect Damage in a image -> AI model output
 /// @return True -> Damage detected | False -> Damage not detected
-bool System::damage_detected(){
-
-    bool dmg_detected = true;
+bool System::damage_detect(bool dmg_detected){
 
     if(dmg_detected){
 
@@ -185,6 +167,10 @@ bool System::damage_detected(){
 
         return true;
     }
+
+    //damage not detected + Send to server
+    cout << "---> DAMAGE NOT DETECTED " << endl;
+    send_ride_ok();
 
     return false;
 }
@@ -205,6 +191,21 @@ void System::add_damage_list(){
 
     //Send to the server
     send_timestamp(log_dmg_msg);
+}
+
+/// @brief Register ride without any damage detected & Send data to server
+void System::send_ride_ok(){
+
+    string log_no_dmg_msg;
+
+    log_no_dmg_msg = append_timestamp(log_no_dmg_msg);
+
+    log_no_dmg_msg = "No Damage Detected @";
+    log_no_dmg_msg = append_timestamp(log_no_dmg_msg);
+    main_logger.log_write_info(log_no_dmg_msg);
+
+    //Send to the server
+    send_timestamp(log_no_dmg_msg);
 }
 
 /// @brief Get LDR value from ADC
@@ -288,13 +289,4 @@ void System::send_timestamp(string timestamp_msg){
             cerr << "Erro desconhecido: " << e.what() << endl;
 
         }   
-}
-
-void System::signal_handler(int signum){
-
-    if(signum == SIGUSR1 && pSys){
-
-        pSys->capture_image();
-
-    }
 }

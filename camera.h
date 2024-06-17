@@ -4,7 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include "logger.h"
 
-#define CAMERA_INDEX 2 // /dev/video2
+#define CAMERA_INDEX 0 // /dev/video0
 
 using namespace std;
 

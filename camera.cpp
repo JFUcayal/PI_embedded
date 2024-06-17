@@ -1,7 +1,7 @@
 #include "camera.h"
 
 //#define CAMERA_DIR "/dev/video0"
-#define CAMERA_DIR "v4l2src device=/dev/video2 ! video/x-raw ! videoconvert ! appsink"
+#define CAMERA_DIR "v4l2src device=/dev/video0 ! video/x-raw ! videoconvert ! appsink"
 #define IMAGE_HEIGHT 640
 #define IMAGE_WIDTH 640
 
