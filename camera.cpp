@@ -81,5 +81,4 @@ bool Camera::save_image(const string& image_path, const cv::Mat& frame){
         return false;
     }
     return true;
-
 }

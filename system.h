@@ -28,7 +28,7 @@ class System{
         cv::Mat photo_frame;
         time_t current_time;
         ofstream dmg_arquive;
-        uint16_t light_value;
+        //uint16_t light_value;
         websocket_client client;
         static System* pSys;
 
@@ -42,10 +42,10 @@ class System{
         string append_timestamp(string);
         string capture_image();
         bool damage_detect(bool);
-        void add_damage_list();
-        uint16_t get_light_value();
+        //uint16_t get_light_value();
         void connect_server();
         void send_timestamp(string);
+        void add_damage_list();
         void send_ride_ok();
 
 };

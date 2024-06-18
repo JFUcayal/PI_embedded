@@ -97,7 +97,7 @@ void run_system_command_and_process() {
         string img_content = img_name + ".txt";
         const char * img = img_content.c_str();
 
-        //Detect damage in bounding boxes .txt file + 
+        //Detect damage in bounding boxes .txt file  
         dmg_detected = read_file(img);
         main_system.damage_detect(dmg_detected);
 

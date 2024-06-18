@@ -119,16 +119,10 @@ string System::capture_image(){
 
     if(camera1.capture_image(photo_frame))
     {
-        //index_char = to_string(photo_index);
-
-        //return_name += index_char;
         return_name = append_timestamp(return_name);
         
-        // ./images/x xx-xx-xxxx xx:xx:xx.jpg
+        // ./images/_xx-xx-xxxx xx:xx:xx.jpg
         string image_path = "./images/" + return_name + ".jpg";
-
-        //Increment overall photo index
-        //photo_index++;
 
         if(camera1.save_image(image_path, photo_frame))
         {
@@ -151,8 +145,6 @@ string System::capture_image(){
 
         main_logger.log_write_error(log_msg);
     }
-
-
     camera1.close_camera();
     return return_name;
 }
@@ -162,7 +154,7 @@ string System::capture_image(){
 bool System::damage_detect(bool dmg_detected){
 
     if(dmg_detected){
-
+        //Add timestamp to dmg_list.txt + Send to server
         add_damage_list();
 
         return true;
@@ -210,14 +202,14 @@ void System::send_ride_ok(){
 
 /// @brief Get LDR value from ADC
 /// @return ADC value read 
-uint16_t System::get_light_value(){
+// uint16_t System::get_light_value(){
 
-    uint16_t light_val;
+//     uint16_t light_val;
 
-    light_val = get_adc_value(0);
+//     light_val = get_adc_value(0);
 
-    return light_val;
-}
+//     return light_val;
+// }
 
 /// @brief Establishes a connection with the node.js server via WebSockets
 void System::connect_server(){

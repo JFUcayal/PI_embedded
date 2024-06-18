@@ -12,7 +12,6 @@ class Camera{
 
     private:
         int camera_index;
-        Logger camera_logger;
 
     public:
         Camera(int camera_index = CAMERA_INDEX);
@@ -20,8 +19,8 @@ class Camera{
         bool open_camera();
         void close_camera();
         bool is_opened();
-        bool capture_image(cv::Mat& frame);
-        bool save_image(const string& image_path, const cv::Mat& frame);
+        bool capture_image(cv::Mat&);
+        bool save_image(const string& , const cv::Mat&);
 };
 
 #endif

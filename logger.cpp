@@ -13,7 +13,6 @@ Logger::~Logger(){
 void Logger::open_logger(){
 
     log_file.open("Log.txt");
-
 }
 
 void Logger::close_logger(){
@@ -30,7 +29,6 @@ void Logger::log_write_info(string info_msg){
 
 void Logger::log_write_error(string error_msg){
 
-
     log_file << "[ERROR]\t  -> ";
     log_file << error_msg << "\n";
     log_file.flush();
@@ -41,5 +39,4 @@ void Logger::log_write_warning(string warning_msg){
     log_file << "[WARNING] -> ";
     log_file << warning_msg << "\n";
     log_file.flush();
-
 }
