@@ -77,22 +77,15 @@ void run_system_command_and_process() {
         
         string img_path = "./images/" + img_name + ".jpg";
 
-        //cout << "NOME IMAGEM -> " << img_path << endl;
-
         sys_cmd_string = "yolo predict source=" + img_path + " conf=0.3 show=True save_txt=True save_conf=True model=best.onnx";
 
-        //cout << "COMANDO -> " << sys_cmd_string << endl;
-
         const char * command = sys_cmd_string.c_str();
-
         system(command);
 
         if (!go_to_directory("runs")) return;
         if (!go_to_directory("detect")) return;
         if (!go_to_directory("predict")) return;
         if (!go_to_directory("labels")) return;
-
-        //cout << "Conteúdo do arquivo:" << endl;
 
         string img_content = img_name + ".txt";
         const char * img = img_content.c_str();
@@ -102,9 +95,6 @@ void run_system_command_and_process() {
         main_system.damage_detect(dmg_detected);
 
         chdir("../../../.."); 
-
-        //system("pwd");
-
         system("rm -r runs");
     } 
 }
@@ -114,7 +104,7 @@ void handle() {
     struct timeval now;
     gettimeofday(&now, NULL);
 
-    unsigned long diff = (now.tv_sec - last_interrupt_time.tv_sec) * 1000000 + (now.tv_usec - last_interrupt_time.tv_usec);
+    unsigned long diff = (now.tv_sec - last_interrupt_time.tv_sec) * DEBOUNCE_TIME + (now.tv_usec - last_interrupt_time.tv_usec);
 
     int current_state = digitalRead(PIN);
 

@@ -89,17 +89,6 @@ time_t System::get_time(){
     return curr_time;
 }
 
-/*
-uint32_t System::get_photo_index(){
-
-    static uint32_t counter = 0;
-
-
-
-    return counter;
-}
-*/
-
 /// @brief Capture image using opencv functions
 /// @return True -> Captured Image | False -> Camera didn't open
 string System::capture_image(){
