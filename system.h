@@ -12,13 +12,15 @@
 #include <cpprest/ws_client.h>
 #include <cpprest/json.h>
 #include <iomanip>
+#include <wiringPi.h>
 
 using namespace web;
 using namespace web::websockets::client;
 
-#define WEB_SOCKET_IP_ADDR "ws://192.168.1.75:3000"
+// #define WEB_SOCKET_IP_ADDR "ws://192.168.1.75:3000"
+#define WEB_SOCKET_IP_ADDR "ws://10.42.0.1:3000"
 #define DEVICE_PATH "/dev/gpio_irq"
-
+#define LED_PIN 7 //GPIO4
 
 class System{
 
@@ -30,6 +32,7 @@ class System{
         ofstream dmg_arquive;
         websocket_client client;
         static System* pSys;
+        bool warning_state;
 
     public:
         System();
@@ -45,6 +48,7 @@ class System{
         void send_timestamp(string);
         void add_damage_list();
         void send_ride_ok();
+        void warning_led(bool);
 
 };
 

@@ -32,6 +32,19 @@ void System::startup(){
 
     cout << "Hello system!" << endl;
 
+    //WARNING LED INIT
+    // WiringPi init
+    if (wiringPiSetup() == -1) {
+        cout << "Error initializing LED" << endl;
+        return;
+    }
+
+    pinMode(LED_PIN, OUTPUT);
+
+    warning_state = false;
+    warning_led(warning_state);
+
+
     //Main & damage_list log opening
     main_logger.open_logger();   
     dmg_arquive.open("dmg_list.txt", ios::out | ios::app | ios::ate);
@@ -146,10 +159,19 @@ bool System::damage_detect(bool dmg_detected){
         //Add timestamp to dmg_list.txt + Send to server
         add_damage_list();
 
+        warning_state = true;
+        warning_led(warning_state);
+
+        cout << "---> DAMAGE DETECTED " << endl;
+
         return true;
     }
 
     //damage not detected + Send to server
+
+    warning_state = false;
+    warning_led(warning_state);
+
     cout << "---> DAMAGE NOT DETECTED " << endl;
     send_ride_ok();
 
@@ -188,17 +210,6 @@ void System::send_ride_ok(){
     //Send to the server
     send_timestamp(log_no_dmg_msg);
 }
-
-/// @brief Get LDR value from ADC
-/// @return ADC value read 
-// uint16_t System::get_light_value(){
-
-//     uint16_t light_val;
-
-//     light_val = get_adc_value(0);
-
-//     return light_val;
-// }
 
 /// @brief Establishes a connection with the node.js server via WebSockets
 void System::connect_server(){
@@ -270,4 +281,15 @@ void System::send_timestamp(string timestamp_msg){
             cerr << "Erro desconhecido: " << e.what() << endl;
 
         }   
+}
+
+void System::warning_led(bool state){
+
+    if (state == true){
+        //Turn ON warning LED
+        digitalWrite(LED_PIN, HIGH);
+    } else {
+        //Turn OFF warning LED 
+        digitalWrite(LED_PIN, LOW);
+    }
 }
